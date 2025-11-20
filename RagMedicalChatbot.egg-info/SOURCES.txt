@@ -1,0 +1,8 @@
+README.md
+setup.py
+RagMedicalChatbot.egg-info/PKG-INFO
+RagMedicalChatbot.egg-info/SOURCES.txt
+RagMedicalChatbot.egg-info/dependency_links.txt
+RagMedicalChatbot.egg-info/requires.txt
+RagMedicalChatbot.egg-info/top_level.txt
+app/__init__.py
