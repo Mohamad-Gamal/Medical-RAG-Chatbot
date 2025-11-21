@@ -7,3 +7,4 @@ RagMedicalChatbot.egg-info/entry_points.txt
 RagMedicalChatbot.egg-info/requires.txt
 RagMedicalChatbot.egg-info/top_level.txt
 app/__init__.py
+app/application.py

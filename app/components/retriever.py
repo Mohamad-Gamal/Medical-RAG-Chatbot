@@ -1,71 +1,73 @@
-from langchain.chains import RetrievalQA
-from langchain.vectorstores import FAISS
-from langchain.embeddings import HuggingFaceEmbeddings
-from langchain_core.prompt_values import PromptTamplate
-from app.components.llm import load_llm
-from app.components.vector_store import load_vector_store
-from app.config.config import HF_TOKEN, HUGGINGFACE_MODEL_NAME, DB_FAISS_PATH
-from app.common.logger import get_logger
-from app.common.custom_exception import CustomException 
-import os
+from langchain_community.vectorstores import FAISS
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_core.prompts import PromptTemplate
+from langchain_classic.chains.combine_documents import create_stuff_documents_chain, create_retrieval_chain
 
-logger = get_logger(__name__)   
+from app.config.config import HF_TOKEN, HUGGINGFACE_MODEL_NAME, HUGGINGFACE_REPO_ID, DB_FAISS_PATH
+from app.components.llm import load_llm
+from app.common.logger import get_logger
+from app.common.custom_exception import CustomException
+
+logger = get_logger(__name__)
+
 
 custom_prompt_template = """
-    You are a highly intelligent question answering bot. 
-    Answer the following medical question in 2-3 lines maximum using only the information provided in the context.
-    If you don't know the answer, just say that you don't know, don't try to make up an answer.
+You are a highly intelligent medical question-answering assistant.
+Answer the medical question in 5-7 lines using ONLY the provided context.
+If the answer is not in the context, say you don't know.
 
-    Context: {context}
+Context:
+{context}
 
-    Question: {question}
-    Answer:"""
+Question:
+{input}
+
+Answer:
+"""
 
 
-def set_custom_prompt(qa_chain: RetrievalQA) -> RetrievalQA:
+def get_retriever_qa():
     try:
-        logger.info("Setting custom prompt template for the QA chain...")
-
-        prompt = PromptTemplate(
-            input_variables=["context", "question"],
-            template= custom_prompt_template
-            )
-        logger.info("Custom prompt template set successfully.")
-        return prompt
-    except Exception as e:
-        logger.error(f"Error setting custom prompt template: {e}")
-        raise CustomException(f"Error setting custom prompt template: {e}")
-
-def get_retriever_qa(llm: HuggingFaceHub) -> RetrievalQA:
-    try:
+        # Load embeddings
         logger.info("Loading embeddings...")
-        embeddings = HuggingFaceEmbeddings(
-            model_name=HUGGINGFACE_MODEL_NAME,
-            huggingfacehub_api_token=HF_TOKEN
-        )
-        logger.info("Embeddings loaded successfully.")
+        embeddings = HuggingFaceEmbeddings(model_name=HUGGINGFACE_MODEL_NAME)
 
-        logger.info("Loading LLM...")
-        llm = load_llm(huggingface_repo_id=HUGGINGFACE_REPO_ID, hf_token=HF_TOKEN)
-        logger.info("LLM loaded successfully.")
-        if llm is None:
-            raise CustomException("LLM could not be loaded.")
-
+        # Load FAISS vector store
         logger.info("Loading FAISS vector store...")
-        vector_store = FAISS.load_local(DB_FAISS_PATH, embeddings)
-        logger.info("FAISS vector store loaded successfully.")
-        if vector_store is None:
-            raise CustomException("Vector store could not be loaded.")
+        vector_store = FAISS.load_local(
+            DB_FAISS_PATH,
+            embeddings,
+            allow_dangerous_deserialization=True
+        )
 
-        retriever = vector_store.as_retriever(search_type="similarity", search_kwargs={"k": 3})
-        logger.info("Creating RetrievalQA chain...")
+        retriever = vector_store.as_retriever(
+            search_type="similarity",
+            search_kwargs={"k": 3}
+        )
 
-        # Retriver chain 
-        qa_chain = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff",
-                                                retriever=retriever, return_source_documents=True,
-                                                chain_type_kwargs={"prompt": set_custom_prompt})
-        logger.info("RetrievalQA chain created successfully.")
-        return qa_chain
+        # Load LLM
+        logger.info("Loading LLM...")
+        llm = load_llm(
+            huggingface_repo_id=HUGGINGFACE_REPO_ID,
+            hf_token=HF_TOKEN
+        )
+
+        if llm is None:
+            raise CustomException("LLM failed to load.")
+
+        # Build Prompt
+        prompt = PromptTemplate.from_template(custom_prompt_template)
+
+        # Build document-chain using classic LangChain
+        document_chain = create_stuff_documents_chain(llm, prompt)
+
+        # Build the full RAG retrieval chain
+        logger.info("Creating Retrieval chain (RAG)...")
+        rag_chain = create_retrieval_chain(retriever, document_chain)
+
+        logger.info("RAG chain created successfully.")
+        return rag_chain
+
     except Exception as e:
-        logger.error(f"Error creating RetrievalQA chain: {e}")
-        raise CustomException(f"Error creating RetrievalQA chain: {e}")
+        logger.error(f"Error creating RAG chain: {e}")
+        raise CustomException(f"Error creating RAG chain: {e}")

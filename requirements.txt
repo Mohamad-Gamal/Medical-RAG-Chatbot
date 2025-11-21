@@ -1,6 +1,9 @@
-langchain
-langchain_community
+langchain==1.0.5  
+langchain-community==0.4.1  
+langchain-text-splitters==1.0.0  
 langchain_huggingface
+langchain-classic
+langchain-core
 langchain_groq
 faiss-cpu
 pypdf
