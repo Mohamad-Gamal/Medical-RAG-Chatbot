@@ -1,4 +1,4 @@
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from app.config.config import HF_TOKEN, HUGGINGFACE_MODEL_NAME
 
 from app.common.logger import get_logger
@@ -12,10 +12,7 @@ def get_embedding_model():
             raise CustomException("HF_TOKEN is not set in environment variables.")
 
         logger.info(f"Loading HuggingFace Embeddings model: {HUGGINGFACE_MODEL_NAME}")
-        embeddings = HuggingFaceEmbeddings(
-            model_name=HUGGINGFACE_MODEL_NAME,
-            huggingfacehub_api_token=HF_TOKEN
-        )
+        embeddings = HuggingFaceEmbeddings(model_name=HUGGINGFACE_MODEL_NAME)
         logger.info("Successfully loaded HuggingFace Embeddings model")
         return embeddings
 
