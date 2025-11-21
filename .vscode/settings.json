@@ -1,3 +1,5 @@
 {
-    "editor.tabCompletion": "on"
+    "editor.tabCompletion": "on",
+    "python-envs.defaultEnvManager": "ms-python.python:system",
+    "python-envs.pythonProjects": []
 }

@@ -8,19 +8,18 @@ from app.config.config import DATA_PATH, CHUNK_OVERLAP, CHUNK_SIZE
 
 logger = get_logger(__name__)
 
-
 def load_pdf_files():
     try:
         if not os.path.exists(DATA_PATH):
-            raise CustomException("Data Path does not exist")
+            raise CustomException(f"Data Path does not exist: {DATA_PATH}")
 
-        logger.info(f"Loading files from {DATA_PATH}")
+        logger.info(f"Loading PDF files from {DATA_PATH}")
 
         loader = DirectoryLoader(DATA_PATH, glob="*.pdf", loader_cls=PyPDFLoader)
         documents = loader.load()
 
         if not documents:
-            logger.warning("There are no PDF files found")
+            logger.warning("No PDF documents found")
         else:
             logger.info(f"Successfully loaded {len(documents)} documents")
 
