@@ -1,8 +1,8 @@
-from langchain_components.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 import os
 from app.config.config import DB_FAISS_PATH
 from app.common.logger import get_logger
-from app.common.custom_exception import Custom_Exception
+from app.common.custom_exception import CustomException
 from app.components.embedding import get_embedding_model
 
 
