@@ -12,6 +12,14 @@ def process_store_pdfs():
     try:
         logger.info("Starting PDF processing and vector store creation/loading")
 
+        # Load existing vector store first
+        vector_store = load_vector_store()
+        if vector_store:
+            logger.info("Vector store loaded successfully.")
+            return vector_store  # ← STOP here, don't rebuild it!
+
+        logger.info("No existing vector store found. Creating a new one...")
+
         # Load PDF files
         documents = load_pdf_files()
         if not documents:
@@ -21,15 +29,12 @@ def process_store_pdfs():
         text_chunks = create_text_chunk(documents)
         if not text_chunks:
             raise CustomException("No text chunks created from documents.")
-        
-        # Load existing vector store if available
-        vector_store = load_vector_store()
-        if vector_store:
-            logger.info("Vector store loaded successfully.")
-            # Save vector store
-            vector_store = save_vector_store(text_chunks)
-            logger.info("PDF processing and vector store setup completed successfully.")
-            return vector_store
+
+        # Save vector store
+        vector_store = save_vector_store(text_chunks)
+        logger.info("New vector store created and saved successfully.")
+
+        return vector_store
 
     except Exception as e:
         error_message = CustomException("Failed to process PDFs and setup vector store!", e)
