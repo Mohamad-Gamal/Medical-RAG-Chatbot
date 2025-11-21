@@ -1,9 +1,7 @@
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_core.prompts import PromptTemplate
-from langchain_classic.chains.combine_documents import create_stuff_documents_chain
-
-from langchain_classic.chains import create_retrieval_chain
+from langchain_classic.chains import ConversationalRetrievalChain
 
 from app.config.config import HF_TOKEN, HUGGINGFACE_MODEL_NAME, HUGGINGFACE_REPO_ID, DB_FAISS_PATH
 from app.components.llm import load_llm
@@ -12,27 +10,30 @@ from app.common.custom_exception import CustomException
 
 logger = get_logger(__name__)
 
-
 custom_prompt_template = """
 You are a highly intelligent medical question-answering assistant.
-Answer the medical question in 5-7 lines using ONLY the provided context.
-If the answer is not in the context, say you don't know.
+Answer the medical question clearly and concisely using ONLY the provided context.
+If the answer is not in the context, politely state that you cannot answer based on the available information.
 
 Context:
 {context}
 
 Question:
-{input}
+{question}
 
-Answer:
+Please provide a helpful and accurate medical response:
 """
-
 
 def get_retriever_qa():
     try:
+        logger.info("Initializing medical QA system...")
+
         # Load embeddings
         logger.info("Loading embeddings...")
-        embeddings = HuggingFaceEmbeddings(model_name=HUGGINGFACE_MODEL_NAME)
+        embeddings = HuggingFaceEmbeddings(
+            model_name=HUGGINGFACE_MODEL_NAME,
+            model_kwargs={'device': 'cpu'}  # Change to 'cuda' if GPU available
+        )
 
         # Load FAISS vector store
         logger.info("Loading FAISS vector store...")
@@ -42,6 +43,7 @@ def get_retriever_qa():
             allow_dangerous_deserialization=True
         )
 
+        # Create retriever
         retriever = vector_store.as_retriever(
             search_type="similarity",
             search_kwargs={"k": 3}
@@ -57,19 +59,30 @@ def get_retriever_qa():
         if llm is None:
             raise CustomException("LLM failed to load.")
 
-        # Build Prompt
-        prompt = PromptTemplate.from_template(custom_prompt_template)
+        # Test the LLM
+        try:
+            test_response = llm.invoke("Say 'Medical AI ready' in one word.")
+            logger.info(f"LLM test response: {test_response}")
+        except Exception as e:
+            logger.warning(f"LLM test failed, but continuing: {e}")
 
-        # Build document-chain using classic LangChain
-        document_chain = create_stuff_documents_chain(llm, prompt)
+        # Build prompt template (for retrieval QA)
+        prompt = PromptTemplate(
+            template=custom_prompt_template,
+            input_variables=["context", "question"]
+        )
 
-        # Build the full RAG retrieval chain
-        logger.info("Creating Retrieval chain (RAG)...")
-        rag_chain = create_retrieval_chain(retriever, document_chain)
+        # Create Conversational RetrievalQA chain
+        logger.info("Creating ConversationalRetrievalChain...")
+        qa_chain = ConversationalRetrievalChain.from_llm(
+            llm=llm,          # conversational LLM
+            retriever=retriever,
+            return_source_documents=True
+        )
 
-        logger.info("RAG chain created successfully.")
-        return rag_chain
+        logger.info("Medical QA system initialized successfully.")
+        return qa_chain
 
     except Exception as e:
-        logger.error(f"Error creating RAG chain: {e}")
-        raise CustomException(f"Error creating RAG chain: {e}")
+        logger.error(f"Error creating medical QA system: {e}")
+        raise CustomException(f"Error creating medical QA system: {e}")

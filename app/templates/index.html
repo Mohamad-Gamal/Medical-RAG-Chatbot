@@ -21,12 +21,7 @@
             --radius: 12px;
         }
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
@@ -35,7 +30,6 @@
             min-height: 100vh;
             padding: 1rem;
         }
-        
         .app-container {
             max-width: 900px;
             margin: 0 auto;
@@ -47,29 +41,20 @@
             box-shadow: var(--shadow);
             overflow: hidden;
         }
-        
         .app-header {
             background: linear-gradient(to right, var(--primary), var(--secondary));
             color: white;
             padding: 1.5rem;
             text-align: center;
-            position: relative;
         }
-        
         .app-header h1 {
             font-size: 1.8rem;
-            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
         }
-        
-        .app-header p {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-        
+        .app-header p { font-size: 0.9rem; opacity: 0.9; }
         .medical-icon {
             background: rgba(255, 255, 255, 0.2);
             border-radius: 50%;
@@ -79,14 +64,7 @@
             align-items: center;
             justify-content: center;
         }
-        
-        .chat-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        
+        .chat-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
         .chat-box {
             flex: 1;
             padding: 1.5rem;
@@ -96,331 +74,103 @@
             flex-direction: column;
             gap: 1rem;
         }
-        
         .message {
             max-width: 80%;
             padding: 1rem 1.25rem;
             border-radius: var(--radius);
             position: relative;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             animation: fadeIn 0.3s ease-out;
         }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .user {
-            align-self: flex-end;
-            background: linear-gradient(to right, var(--primary), #3b82f6);
-            color: white;
-            border-bottom-right-radius: 4px;
-        }
-        
-        .assistant {
-            align-self: flex-start;
-            background: white;
-            color: var(--dark);
-            border: 1px solid var(--gray-light);
-            border-bottom-left-radius: 4px;
-        }
-        
-        .message-header {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-            font-size: 0.85rem;
-        }
-        
-        .user .message-header {
-            justify-content: flex-end;
-        }
-        
-        .message-header i {
-            font-size: 1rem;
-        }
-        
-        .message-content {
-            line-height: 1.5;
-        }
-        
-        .input-area {
-            padding: 1.5rem;
-            background: white;
-            border-top: 1px solid var(--gray-light);
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-        
-        .error {
-            background-color: #fed7d7;
-            color: var(--danger);
-            padding: 0.75rem 1rem;
-            border-radius: var(--radius);
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .error i {
-            font-size: 1.1rem;
-        }
-        
-        .input-form {
-            display: flex;
-            gap: 0.75rem;
-        }
-        
-        textarea {
-            flex: 1;
-            padding: 1rem;
-            border: 1px solid var(--gray-light);
-            border-radius: var(--radius);
-            font-family: inherit;
-            font-size: 1rem;
-            resize: none;
-            height: 60px;
-            transition: all 0.2s;
-        }
-        
-        textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(45, 125, 210, 0.2);
-        }
-        
-        .send-btn {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            border-radius: var(--radius);
-            padding: 0 1.5rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .send-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 0.75rem;
-        }
-        
-        .clear-btn {
-            background: white;
-            color: var(--gray);
-            border: 1px solid var(--gray-light);
-            border-radius: var(--radius);
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.2s;
-        }
-        
-        .clear-btn:hover {
-            background: #f7fafc;
-            color: var(--dark);
-        }
-        
-        .disclaimer {
-            text-align: center;
-            font-size: 0.75rem;
-            color: var(--gray);
-            margin-top: 0.5rem;
-        }
-        
-        .typing-indicator {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            color: var(--gray);
-            font-style: italic;
-        }
-        
-        .typing-dots {
-            display: flex;
-            gap: 0.25rem;
-        }
-        
-        .typing-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background-color: var(--gray);
-            animation: typingAnimation 1.4s infinite ease-in-out;
-        }
-        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .user { align-self: flex-end; background: linear-gradient(to right, var(--primary), #3b82f6); color: white; border-bottom-right-radius: 4px; }
+        .assistant { align-self: flex-start; background: white; color: var(--dark); border: 1px solid var(--gray-light); border-bottom-left-radius: 4px; }
+        .message-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; font-size: 0.85rem; }
+        .user .message-header { justify-content: flex-end; }
+        .message-content { line-height: 1.5; }
+        .input-area { padding: 1.5rem; background: white; border-top: 1px solid var(--gray-light); display: flex; flex-direction: column; gap: 1rem; }
+        .error { background-color: #fed7d7; color: var(--danger); padding: 0.75rem 1rem; border-radius: var(--radius); font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; }
+        .input-form { display: flex; gap: 0.75rem; }
+        textarea { flex: 1; padding: 1rem; border: 1px solid var(--gray-light); border-radius: var(--radius); font-family: inherit; font-size: 1rem; resize: none; height: 60px; transition: all 0.2s; }
+        textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(45, 125, 210, 0.2); }
+        .send-btn { background: linear-gradient(to right, var(--primary), var(--secondary)); color: white; border: none; border-radius: var(--radius); padding: 0 1.5rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s; }
+        .send-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .actions { display: flex; justify-content: flex-end; gap: 0.75rem; }
+        .clear-btn { background: white; color: var(--gray); border: 1px solid var(--gray-light); border-radius: var(--radius); padding: 0.5rem 1rem; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s; }
+        .clear-btn:hover { background: #f7fafc; color: var(--dark); }
+        .disclaimer { text-align: center; font-size: 0.75rem; color: var(--gray); margin-top: 0.5rem; }
+        .typing-indicator { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; color: var(--gray); font-style: italic; }
+        .typing-dots { display: flex; gap: 0.25rem; }
+        .typing-dot { width: 6px; height: 6px; border-radius: 50%; background-color: var(--gray); animation: typingAnimation 1.4s infinite ease-in-out; }
         .typing-dot:nth-child(1) { animation-delay: -0.32s; }
         .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-        
-        @keyframes typingAnimation {
-            0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
-            40% { transform: scale(1); opacity: 1; }
-        }
-        
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .app-container {
-                height: 100vh;
-                border-radius: 0;
-            }
-            
-            .message {
-                max-width: 90%;
-            }
-            
-            .app-header h1 {
-                font-size: 1.5rem;
-            }
-            
-            .input-form {
-                flex-direction: column;
-            }
-            
-            .send-btn {
-                padding: 0.75rem;
-                justify-content: center;
-            }
-        }
+        @keyframes typingAnimation { 0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; } 40% { transform: scale(1); opacity: 1; } }
+        @media (max-width: 768px) { .app-container { height: 100vh; border-radius: 0; } .message { max-width: 90%; } .app-header h1 { font-size: 1.5rem; } .input-form { flex-direction: column; } .send-btn { padding: 0.75rem; justify-content: center; } }
     </style>
 </head>
 <body>
     <div class="app-container">
         <header class="app-header">
             <h1>
-                <div class="medical-icon">
-                    <i class="fas fa-stethoscope"></i>
-                </div>
+                <div class="medical-icon"><i class="fas fa-stethoscope"></i></div>
                 GenAI Medical Assistant
             </h1>
             <p>Your AI-powered healthcare companion for reliable medical information</p>
         </header>
-        
         <div class="chat-container">
             <div class="chat-box" id="chat-box">
-                <!-- Messages will be displayed here -->
                 {% for msg in messages %}
                     <div class="message {{ msg.role }}">
                         <div class="message-header">
-                            {% if msg.role == 'user' %}
-                                <i class="fas fa-user"></i>
-                            {% else %}
-                                <i class="fas fa-robot"></i>
-                            {% endif %}
+                            {% if msg.role == 'user' %}<i class="fas fa-user"></i>{% else %}<i class="fas fa-robot"></i>{% endif %}
                             <strong>{{ msg.role|capitalize }}</strong>
                         </div>
-                        <div class="message-content">
-                            {{ msg.content | safe | nl2br }}
-                        </div>
+                        <div class="message-content">{{ msg.content | safe | nl2br }}</div>
                     </div>
                 {% endfor %}
-                
-                <!-- Sample initial assistant message (you can remove this in production) -->
                 {% if not messages %}
                     <div class="message assistant">
-                        <div class="message-header">
-                            <i class="fas fa-robot"></i>
-                            <strong>Assistant</strong>
-                        </div>
+                        <div class="message-header"><i class="fas fa-robot"></i><strong>Assistant</strong></div>
                         <div class="message-content">
-                            Hello! I'm your GenAI Medical Assistant. I'm here to provide helpful medical information and answer your health-related questions. Please remember that I'm an AI and not a substitute for professional medical advice.
-                            <br><br>
-                            How can I help you today?
+                            Hello! I'm your GenAI Medical Assistant. I provide general medical information. Please consult a professional for serious concerns.<br><br>How can I help you today?
                         </div>
                     </div>
                 {% endif %}
             </div>
-            
+
             <div class="input-area">
                 {% if error %}
-                    <div class="error">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        {{ error }}
-                    </div>
+                    <div class="error"><i class="fas fa-exclamation-triangle"></i>{{ error }}</div>
                 {% endif %}
                 
-                <form method="post" action="{{ url_for('index') }}" class="input-form">
+                <form method="post" action="{{ url_for('index') }}" class="input-form" autocomplete="off">
                     <textarea name="prompt" placeholder="Describe your symptoms or ask a medical question..." required></textarea>
-                    <button type="submit" class="send-btn">
-                        <i class="fas fa-paper-plane"></i>
-                        Send
-                    </button>
+                    <button type="submit" class="send-btn"><i class="fas fa-paper-plane"></i>Send</button>
                 </form>
                 
                 <div class="actions">
-                    <form method="get" action="{{ url_for('clear') }}">
-                        <button type="submit" class="clear-btn">
-                            <i class="fas fa-broom"></i>
-                            Clear Chat
-                        </button>
+                    <form method="get" action="{{ url_for('clear_history') }}">
+                        <button type="submit" class="clear-btn"><i class="fas fa-broom"></i>Clear Chat</button>
                     </form>
                 </div>
                 
-                <div class="disclaimer">
-                    <i class="fas fa-info-circle"></i>
-                    This AI assistant provides general health information only. Always consult a healthcare professional for medical advice.
-                </div>
+                <div class="disclaimer"><i class="fas fa-info-circle"></i> This AI assistant provides general health information only. Always consult a healthcare professional.</div>
             </div>
         </div>
     </div>
 
     <script>
-        // Auto-scroll to the bottom of the chat
         function scrollToBottom() {
             const chatBox = document.getElementById('chat-box');
             chatBox.scrollTop = chatBox.scrollHeight;
         }
-        
-        // Scroll to bottom when page loads
         window.addEventListener('load', scrollToBottom);
-        
-        // Focus on textarea when page loads
-        document.querySelector('textarea').focus();
-        
-        // Auto-resize textarea as user types
+
         const textarea = document.querySelector('textarea');
+        textarea.focus();
         textarea.addEventListener('input', function() {
             this.style.height = 'auto';
             this.style.height = (this.scrollHeight) + 'px';
-        });
-        
-        // Add a typing indicator (you can implement this with WebSocket in production)
-        function showTypingIndicator() {
-            const typingIndicator = document.createElement('div');
-            typingIndicator.className = 'typing-indicator';
-            typingIndicator.innerHTML = `
-                <i class="fas fa-robot"></i>
-                <span>Assistant is typing</span>
-                <div class="typing-dots">
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                </div>
-            `;
-            document.getElementById('chat-box').appendChild(typingIndicator);
-            scrollToBottom();
-        }
-        
-        // For demonstration purposes, show typing indicator when form is submitted
-        document.querySelector('form').addEventListener('submit', function() {
-            // In a real implementation, you would show this while waiting for the server response
-            // showTypingIndicator();
         });
     </script>
 </body>
