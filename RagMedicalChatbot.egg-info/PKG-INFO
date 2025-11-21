@@ -1,7 +1,13 @@
 Metadata-Version: 2.4
 Name: RagMedicalChatbot
-Version: 0.1
-Author: mohamad_gamal
+Version: 0.1.0
+Summary: Medical RAG Chatbot with FAISS and HuggingFace embeddings
+Author: Mohamad Gamal
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Requires-Python: >=3.8
 Requires-Dist: langchain
 Requires-Dist: langchain_community
 Requires-Dist: langchain_huggingface
@@ -13,4 +19,7 @@ Requires-Dist: flask
 Requires-Dist: python-dotenv
 Requires-Dist: sentence-transformers
 Dynamic: author
+Dynamic: classifier
 Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
