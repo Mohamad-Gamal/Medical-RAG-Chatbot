@@ -1,7 +1,9 @@
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_core.prompts import PromptTemplate
-from langchain_classic.chains.combine_documents import create_stuff_documents_chain, create_retrieval_chain
+from langchain_classic.chains.combine_documents import create_stuff_documents_chain
+
+from langchain_classic.chains import create_retrieval_chain
 
 from app.config.config import HF_TOKEN, HUGGINGFACE_MODEL_NAME, HUGGINGFACE_REPO_ID, DB_FAISS_PATH
 from app.components.llm import load_llm
