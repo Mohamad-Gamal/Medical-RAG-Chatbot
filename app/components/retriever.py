@@ -1,7 +1,7 @@
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_core.prompts import PromptTemplate
-from langchain_classic.chains import ConversationalRetrievalChain
+from langchain_classic.chains import RetrievalQA  # Fixed import
 
 from app.config.config import HF_TOKEN, HUGGINGFACE_MODEL_NAME, HUGGINGFACE_REPO_ID, DB_FAISS_PATH
 from app.components.llm import load_llm
@@ -15,11 +15,9 @@ You are a highly intelligent medical question-answering assistant.
 Answer the medical question clearly and concisely using ONLY the provided context.
 If the answer is not in the context, politely state that you cannot answer based on the available information.
 
-Context:
-{context}
+Context: {context}
 
-Question:
-{question}
+Question: {question}
 
 Please provide a helpful and accurate medical response:
 """
@@ -32,7 +30,7 @@ def get_retriever_qa():
         logger.info("Loading embeddings...")
         embeddings = HuggingFaceEmbeddings(
             model_name=HUGGINGFACE_MODEL_NAME,
-            model_kwargs={'device': 'cpu'}  # Change to 'cuda' if GPU available
+            model_kwargs={'device': 'cpu'}
         )
 
         # Load FAISS vector store
@@ -59,25 +57,29 @@ def get_retriever_qa():
         if llm is None:
             raise CustomException("LLM failed to load.")
 
-        # Test the LLM
+        # Test the LLM with simpler approach
         try:
-            test_response = llm.invoke("Say 'Medical AI ready' in one word.")
-            logger.info(f"LLM test response: {test_response}")
+            # Use invoke with proper input format
+            test_response = llm.invoke("Medical AI ready")
+            logger.info(f"LLM test successful")
         except Exception as e:
-            logger.warning(f"LLM test failed, but continuing: {e}")
+            logger.warning(f"LLM test warning: {e}")
+            # Continue anyway - some models might have different interfaces
 
-        # Build prompt template (for retrieval QA)
+        # Build prompt template
         prompt = PromptTemplate(
             template=custom_prompt_template,
             input_variables=["context", "question"]
         )
 
-        # Create Conversational RetrievalQA chain
-        logger.info("Creating ConversationalRetrievalChain...")
-        qa_chain = ConversationalRetrievalChain.from_llm(
-            llm=llm,          # conversational LLM
+        # Create standard RetrievalQA chain (more stable)
+        logger.info("Creating RetrievalQA chain...")
+        qa_chain = RetrievalQA.from_chain_type(
+            llm=llm,
+            chain_type="stuff",
             retriever=retriever,
-            return_source_documents=True
+            return_source_documents=True,
+            chain_type_kwargs={"prompt": prompt}
         )
 
         logger.info("Medical QA system initialized successfully.")

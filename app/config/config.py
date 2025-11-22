@@ -1,11 +1,23 @@
 import os
+from dotenv import load_dotenv
 
-HF_TOKEN = os.environ.get("HF_TOKEN")  # Your HuggingFace API token
-HUGGINGFACE_REPO_ID = "NousResearch/Llama-2-13b-chat-hf"  # Optional if you use repo
-HUGGINGFACE_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2" # Example model name
+# Load variables from .env
+load_dotenv()
 
-DB_FAISS_PATH = "vectorstore/db/faiss"  # Fixed spelling
-DATA_PATH = "data/"
+# HuggingFace Tokens
+HF_TOKEN = os.getenv("HF_TOKEN")
+HUGGINGFACEHUB_API_TOKEN = os.getenv("HUGGINGFACEHUB_API_TOKEN")
 
-CHUNK_SIZE = 500
-CHUNK_OVERLAP = 50
+# LLM model (for answering questions)
+HUGGINGFACE_REPO_ID = os.getenv("HUGGINGFACE_REPO_ID", "meta-llama/Llama-3.1-8B-Instruct")
+
+# Embedding model (for FAISS vector store)
+HUGGINGFACE_MODEL_NAME = os.getenv("HUGGINGFACE_MODEL_NAME", "sentence-transformers/all-MiniLM-L6-v2")
+
+# Paths
+DB_FAISS_PATH = os.getenv("DB_FAISS_PATH", "vectorstore/db/faiss")
+DATA_PATH = os.getenv("DATA_PATH", "data/")
+
+# Chunking
+CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", 500))
+CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", 50))
