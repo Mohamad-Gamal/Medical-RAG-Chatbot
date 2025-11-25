@@ -2,7 +2,8 @@ from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_core.prompts import PromptTemplate
 from langchain_classic.chains import RetrievalQA  # ✅ CORRECT IMPORT
-
+from ollama import Ollama
+from langchain.llms.base import LLM
 from app.config.config import HF_TOKEN, HUGGINGFACE_MODEL_NAME, HUGGINGFACE_REPO_ID, DB_FAISS_PATH
 from app.components.llm import load_llm
 from app.common.logger import get_logger
@@ -63,7 +64,7 @@ def get_retriever_qa():
         logger.info("Creating RetrievalQA chain...")
         qa_chain = RetrievalQA.from_chain_type(
             llm=llm,
-            chain_type="stuff",
+            chain_type="map_reduce",
             retriever=retriever,
             return_source_documents=True,
             chain_type_kwargs={"prompt": prompt}

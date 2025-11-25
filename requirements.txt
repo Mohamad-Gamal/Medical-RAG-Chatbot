@@ -11,3 +11,4 @@ huggingface_hub
 flask
 python-dotenv
 sentence-transformers
+ollama==0.13.0

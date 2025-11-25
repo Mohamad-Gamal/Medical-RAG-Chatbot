@@ -11,6 +11,8 @@ HUGGINGFACEHUB_API_TOKEN = os.getenv("HUGGINGFACEHUB_API_TOKEN")
 # LLM model (for answering questions)
 HUGGINGFACE_REPO_ID = os.getenv("HUGGINGFACE_REPO_ID", "mistralai/Mistral-7B-Instruct-v0.3")
 
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen-2:1.5b")
+
 # Embedding model (for FAISS vector store)
 HUGGINGFACE_MODEL_NAME = os.getenv("HUGGINGFACE_MODEL_NAME", "sentence-transformers/all-MiniLM-L6-v2")
 
