@@ -3,6 +3,7 @@ import os
 from app.common.logger import get_logger
 from app.common.custom_exception import CustomException
 from app.components.pdf_loader import load_pdf_files, create_text_chunk
+from app.components.csv_loader import load_csv_files
 from app.components.vector_store import save_vector_store, load_vector_store
 from app.config.config import DB_FAISS_PATH
 
@@ -23,7 +24,7 @@ def rebuild_vector_store(force_rebuild=True):
         logger.info("Creating a new FAISS vector store from PDFs...")
 
         # Load PDFs
-        documents = load_pdf_files()
+        documents = load_csv_files()
         if not documents:
             raise CustomException("No PDF documents found.")
 
